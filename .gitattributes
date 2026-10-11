@@ -1,0 +1,7 @@
+# 逐字节比对的 golden 文件必须保持 LF，避免 checkout 端换行差异
+*.json text eol=lf
+*.rs text eol=lf
+*.md text eol=lf
+*.toml text eol=lf
+*.yml text eol=lf
+*.ps1 text eol=crlf
