@@ -4,6 +4,50 @@
 [![license: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![platform: windows](https://img.shields.io/badge/platform-Windows--only-lightgrey)](https://github.com/YuanShenNiuBi1314/devzone)
 
+> **The "UPS" for your unattended AI coding tasks.** When the battery is about to die, devzone gracefully pauses your AI sessions (saves first — hotkey → UI Automation → WM_CLOSE), writes a checkpoint, waits in power-saving mode, and auto-resumes when power returns. It also watches your AI agent for stalls and credit burn, and pings your phone when something needs you.
+
+[English](#english) · [中文版](#中文版)
+
+## English
+
+### Why devzone
+
+AI agents now run unattended for hours — generating, refactoring, burning credits. Three things routinely kill the night:
+
+1. **The battery dies** and the session is cut mid-write (corrupted files, lost context, wasted credits).
+2. **The agent stalls or asks a question** at 2 AM while you are out — and keeps burning credits doing nothing.
+3. **Windows Update reboots** in the middle of a crunch delivery.
+
+devzone is a local-first Rust CLI for Windows that guards all three, with **no cloud, no telemetry, no third-party manipulation** — it only reads and reminds (and, on battery emergency, asks apps to save and quit through their own graceful-close paths).
+
+### What it does
+
+- **Battery Guardian** — a 3-level state machine (warn 20% → graceful pause 15% → hard shutdown 5%). On the way down it runs a *graceful pause ladder* (SendInput hotkeys → UI Automation → WM_CLOSE → optional OCR fallback, default off → force-kill only as last resort, with an honest `clean_exit=false` record), writes a 3-layer checkpoint (app save → optional git commit → devzone task manifest), enters power-saving wait (eco power plan, no sleep, Lite sensing), then **auto-resumes the manifest when power returns**. It also detects a "resting charger" (AC online but the level keeps falling).
+- **AI Delivery Watchdog** — stall detection via output-region pixel-hash (zero OCR by default), Full/Lite sensing tiers (Lite during power-saving: no OCR at all), credit monitoring through `official API > UIA > OCR > manual import`, and phone notifications via SMTP / Feishu / Windows Toast. Reminders tell you exactly which app to open on your phone and tap *continue*.
+- **Update Crunch** — pause Windows Update for up to 35 days (`HKLM\SOFTWARE\Microsoft\WindowsUpdate\UX\Settings`), auto-resume when expired.
+- **Dev Zone Watch** — register folders ("dev zones"), track size / file counts / big files / free space, alert on thresholds.
+- **Scheduler** — cron-subset scheduled tasks via `schtasks`, plus a template library (shutdown / reminder / cleanup).
+- **Profiles & Plugins** — one-command presets (`low` / `mid` / `pro`), plus an out-of-process plugin bus (12 events, JSON via stdin, any language). GUI-injection auto-continue is *not* built in — only official-platform channels; plugins are the extension point.
+
+### Quick start
+
+```powershell
+cargo build --release
+.\target\release\devzone.exe doctor          # 9-point environment check
+.\target\release\devzone.exe profile apply mid
+```
+
+### Status
+
+- **M1** (zone / sched / guard tier1 / crunch / profile / plugins / doctor): implemented — 270 tests green, CI on Windows.
+- **M2** (watchdog): core implemented; end-to-end sensing still needs per-app verification (see roadmap below).
+- **M3** (tray GUI): not implemented yet.
+
+The full Chinese README below has the complete command table, state-machine details, disclaimers and honest implementation-diff notes.
+
+---
+## 中文版
+
 本地优先的 Windows 开发环境自治工具：划定开发区 → 自动盯占用 → 守住电源与更新 → 盯 AI 交付会话（停顿 / 提问 / 积分预警）→ 通知到手机，人在外面也能随时接管。
 
 - 仓库：<https://github.com/YuanShenNiuBi1314/devzone>
