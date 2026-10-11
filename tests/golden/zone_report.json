@@ -1,0 +1,58 @@
+{
+  "command": "zone report",
+  "data": {
+    "alert": {
+      "debounce_hours": 6,
+      "metric": "free_gb",
+      "threshold": 4294967296.0,
+      "triggered": true
+    },
+    "big_files": [
+      {
+        "bytes": 4096,
+        "human": "4.00KB",
+        "path": "<FIXTURE>\\assets\\big.dat",
+        "rank": 1
+      },
+      {
+        "bytes": 1024,
+        "human": "1.00KB",
+        "path": "<FIXTURE>\\assets\\mid.dat",
+        "rank": 2
+      },
+      {
+        "bytes": 300,
+        "human": "300B",
+        "path": "<FIXTURE>\\docs\\img\\logo.png",
+        "rank": 3
+      },
+      {
+        "bytes": 300,
+        "human": "300B",
+        "path": "<FIXTURE>\\docs\\notes.txt",
+        "rank": 4
+      }
+    ],
+    "current": {
+      "dir_count": 4,
+      "file_count": 8,
+      "id": 1,
+      "total_bytes": 5925,
+      "total_human": "5.79KB"
+    },
+    "delta": {
+      "bytes": null,
+      "files": null
+    },
+    "previous": null,
+    "schema": "zone-report/1",
+    "top_n": 4,
+    "zone": {
+      "alert_free_gb": 4294967296.0,
+      "drive": "<DRIVE>",
+      "name": "golden",
+      "path": "<FIXTURE>"
+    }
+  },
+  "ok": true
+}

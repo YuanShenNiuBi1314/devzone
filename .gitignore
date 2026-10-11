@@ -1,0 +1,12 @@
+# 构建产物。注意：Cargo.lock 必须提交（bin crate 需要可复现构建），因此不写 Cargo.lock。
+/target
+
+# 本地运行产生的日志
+*.log
+
+# 编辑器 / IDE
+.idea/
+.vscode/
+
+# 截图草稿（正式截图用 png 提交，临时图不入库）
+docs/screenshots/*.tmp

@@ -1,0 +1,101 @@
+[package]
+name = "devzone"
+version = "0.1.0"
+edition = "2021"
+rust-version = "1.75"
+license = "MIT"
+readme = "README.md"
+description = "Local-first Windows dev-environment autonomy: dev zone occupancy watch, scheduled tasks, battery guardian with graceful pause, update crunch, AI delivery watchdog, phone notifications"
+keywords = ["windows", "cli", "battery", "devops", "local-first"]
+categories = ["command-line-utilities", "development-tools"]
+
+[dependencies]
+anyhow = "1"
+chrono = { version = "0.4", features = ["serde"] }
+clap = { version = "4", features = ["derive", "env", "wrap_help"] }
+dirs = "5"
+encoding_rs = "0.8"
+image = { version = "0.25", default-features = false, features = ["png"] }
+lettre = { version = "0.11", default-features = false, features = [
+    "builder",
+    "file-transport",
+    "hostname",
+    "native-tls",
+    "pool",
+    "smtp-transport",
+] }
+reqwest = { version = "0.12", default-features = false, features = [
+    "blocking",
+    "json",
+    "rustls-tls",
+] }
+rusqlite = { version = "0.32", features = ["bundled"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+thiserror = "2"
+toml = "0.8"
+toml_edit = "0.22"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+tray-icon = { version = "0.26", optional = true }
+winreg = "0.52"
+regex = "1"
+windows = { version = "0.58", features = [
+    "std",
+    "Win32_Foundation",
+    "Win32_Graphics_Gdi",
+    "Win32_Security",
+    "Win32_Storage_FileSystem",
+    "Win32_System_Com",
+    "Win32_System_Console",
+    "Win32_System_Diagnostics_ToolHelp",
+    "Win32_System_LibraryLoader",
+    "Win32_System_Power",
+    "Win32_System_ProcessStatus",
+    "Win32_System_Registry",
+    "Win32_System_Shutdown",
+    "Win32_System_SystemInformation",
+    "Win32_System_Threading",
+    "Win32_UI_Accessibility",
+    "Win32_UI_Input_KeyboardAndMouse",
+    "Win32_UI_Shell",
+    "Win32_UI_WindowsAndMessaging",
+] }
+
+[dev-dependencies]
+assert_cmd = "2"
+predicates = "3"
+serial_test = "4"
+tempfile = "3"
+tiny_http = "0.12"
+
+[features]
+default = []
+# OCR adapter (graceful-pause level 4, disabled by default) + Full-mode credit reading.
+ocr = [
+    "windows/Media_Ocr",
+    "windows/Graphics_Imaging",
+    "windows/Storage_Streams",
+    "windows/Foundation_Collections",
+    "windows/Foundation",
+]
+# Windows toast notification channel.
+toast = [
+    "windows/UI_Notifications",
+    "windows/Data_Xml_Dom",
+    "windows/Storage_Streams",
+    "windows/Foundation_Collections",
+    "windows/Foundation",
+]
+# Tray resident process (M3): graceful-pause progress, shutdown block, screen off.
+tray = ["dep:tray-icon"]
+
+[[bin]]
+name = "devzone"
+path = "src/main.rs"
+
+[profile.release]
+opt-level = 2
+lto = false
+strip = true
+panic = "abort"

@@ -1,0 +1,6 @@
+name = "auto-continue-example"
+version = "0.1.0"
+description = "示例：power_restored 后向官方 CLI 发 continue（仅官方通道）"
+events = ["power_restored", "stall_detected"]
+command = "continue.ps1"      # 相对插件目录，任意语言
+timeout_sec = 30
